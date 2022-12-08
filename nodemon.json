@@ -1,6 +1,6 @@
 {
   "ignore": ["**/*.test.ts", "**/*.spec.ts", "node_modules"],
-  "watch": ["server"],
-  "exec": "node --experimental-specifier-resolution=node --loader ts-node/esm ./server/index.ts",
+  "watch": ["server", "shared", "tsconfig.json"],
+  "exec": "node --loader ts-node/esm ./server/index.ts",
   "ext": "ts"
 }

@@ -27,6 +27,7 @@ export default function createModal(name: string, content: string) {
 		document.removeEventListener('keydown', keyCloseFunc);
 	};
 
+	// @ts-ignore
 	modal.firstElementChild.children[0].children[1].addEventListener('click', closeModal);
 
 	modal.addEventListener('click', ({ target }) => {

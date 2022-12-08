@@ -4,7 +4,7 @@
     "useDefineForClassFields": true,
     "module": "ESNext",
     "lib": ["ESNext", "DOM"],
-    "moduleResolution": "Node",
+    "moduleResolution": "node",
     "strict": true,
     "outDir": "server/dist",
     "sourceMap": true,
@@ -14,7 +14,8 @@
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "noImplicitReturns": true,
-		"strictNullChecks": false,
+    "strictNullChecks": false,
+    "types": ["vite/client", "node"]
   },
-  "include": ["client/**/*/.ts", "server/**/*.ts"]
+  "include": ["client/**/*/.ts", "server/**/*.ts", "shared/Constants.ts"]
 }
