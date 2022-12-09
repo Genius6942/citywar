@@ -15,7 +15,8 @@
     "noUnusedParameters": true,
     "noImplicitReturns": true,
     "strictNullChecks": false,
-    "types": ["vite/client", "node"]
+    "types": ["vite/client", "node"],
+		"jsx": "react-jsx"
   },
   "include": ["client/**/*/.ts", "server/**/*.ts", "shared/Constants.ts"]
 }

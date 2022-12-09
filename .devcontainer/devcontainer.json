@@ -12,8 +12,8 @@
   "forwardPorts": [8080, 8081],
 
   // Use 'postCreateCommand' to run commands after the container is created.
-  "postCreateCommand": "npm install",
-  "postStartCommand": ["npm run server", "npm run client"]
+  "postCreateCommand": "npm install"
+  // "postStartCommand": ["npm run server", "npm run client"]
 
   // Configure tool-specific properties.
   // "customizations": {},

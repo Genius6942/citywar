@@ -1,5 +1,7 @@
 // @ts-ignore
 import desertTexture from "../assets/textures/desert.jpg";
+// @ts-ignore
+import model from "../assets/models/my first project.glb";
 import Contstants from "../../shared/Constants";
 import {
   AmbientLight,
@@ -13,7 +15,9 @@ import {
   TextureLoader,
   WebGLRenderer,
 } from "three";
+import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
 import Constants from "../../shared/Constants";
+import { initializeMouseRaycast } from "./raycast";
 
 const bindDrag = (
   element: HTMLCanvasElement,
@@ -49,17 +53,22 @@ export const initWorld = () => {
   const renderer = new WebGLRenderer({ antialias: true });
   renderer.setSize(window.innerWidth, window.innerHeight);
   document.body.appendChild(renderer.domElement);
-
-  const geometry = new BoxGeometry(Constants.GAME.TILE_SIZE, 1, Constants.GAME.TILE_SIZE);
-
-  const material = new MeshStandardMaterial();
   new TextureLoader()
     .loadAsync(desertTexture)
     .then((texture) => {
-      material.map = texture;
-      material.needsUpdate = true;
+      tiles.forEach(({ material }) => {
+        material.map = texture;
+        material.needsUpdate = true;
+      });
     })
     .catch(console.error);
+
+  new GLTFLoader().loadAsync("/assets/models/my first project.glb").then((gltf) => {
+    const model = gltf.scene;
+    scene.add(model);
+  });
+
+  const tiles: Mesh<BoxGeometry, MeshStandardMaterial>[] = [];
 
   const ambientLight = new AmbientLight(0xffffff, 0.5);
   const directionalLight = new DirectionalLight(0xffffff, 0.6);
@@ -67,22 +76,34 @@ export const initWorld = () => {
 
   for (let i = 0; i < Constants.GAME.GRID_SIZE; i++) {
     for (let j = 0; j < Constants.GAME.GRID_SIZE; j++) {
+      const geometry = new BoxGeometry(
+        Constants.GAME.TILE_SIZE,
+        1,
+        Constants.GAME.TILE_SIZE
+      );
+
+      const material = new MeshStandardMaterial();
       const tile = new Mesh(geometry, material);
       tile.position.set(
         i * Constants.GAME.TILE_SIZE,
         -Contstants.GAME.TILE_SIZE / 2,
         j * Constants.GAME.TILE_SIZE
       );
+      tile.name = "tile";
       scene.add(tile);
+      tiles.push(tile);
     }
   }
 
   const cameraHolder = new Object3D();
-  cameraHolder.position.set(0, 0, -2);
   camera.position.y = 4;
   cameraHolder.add(camera);
   camera.lookAt(0, 0, 0);
   scene.add(cameraHolder);
+  cameraHolder.rotation.y = Math.PI;
+  cameraHolder.position.set(0, 0, -2);
+
+  initializeMouseRaycast(scene, camera, renderer.domElement);
 
   bindDrag(
     renderer.domElement,
@@ -91,8 +112,10 @@ export const initWorld = () => {
       cameraHolder.position.z += ((y / 100) * camera.position.y) / 4;
     },
     (x, y) => {
-      cameraHolder.rotation.y += x / 100;
-      cameraHolder.rotation.x += y / 100;
+      cameraHolder.rotation.x = Math.min(
+        Math.max(cameraHolder.rotation.x + y / 100, -Math.PI / 2),
+        0
+      );
     }
   );
   renderer.domElement.addEventListener("contextMenu", (e) => e.preventDefault());
