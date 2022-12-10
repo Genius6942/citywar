@@ -24,13 +24,13 @@ const bindDrag = (
   translateCallback: (x: number, y: number) => void,
   rotateCallBack: (x: number, y: number) => void
 ) => {
-  let isDragging = false;
+  let button = -1;
   element.addEventListener("mousedown", (e) => {
-    isDragging = true;
+    button = e.button;
   });
   document.addEventListener("mousemove", ({ movementX, movementY, ctrlKey }) => {
-    if (isDragging) {
-      if (ctrlKey) {
+    if (button > -1) {
+      if (ctrlKey || button === 2) {
         rotateCallBack(movementX, movementY);
       } else {
         translateCallback(movementX, movementY);
@@ -38,7 +38,7 @@ const bindDrag = (
     }
   });
   document.addEventListener("mouseup", () => {
-    isDragging = false;
+    button = -1;
   });
 };
 
@@ -118,7 +118,7 @@ export const initWorld = () => {
       );
     }
   );
-  renderer.domElement.addEventListener("contextMenu", (e) => e.preventDefault());
+  renderer.domElement.addEventListener("contextmenu", (e) => e.preventDefault());
   renderer.domElement.addEventListener("wheel", (e) => {
     camera.position.y += e.deltaY / 100;
   });
