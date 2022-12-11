@@ -1,7 +1,6 @@
 {
   "name": "citywar",
   "version": "1.0.0",
-  // "homepage": "https://sockey.fezzle.dev",
   "description": "",
   "main": "index.js",
   "type": "module",
