@@ -1,5 +1,5 @@
 import React from "react";
-import Renderer from "./renderer";
+import Renderer from "./rendering/renderer";
 
 import Controls from './controls';
 
